@@ -10,16 +10,18 @@ pipeline {
     disableConcurrentBuilds()
     }
    parameters {
+      string(defaultValue: 'helloworld-project-1', description: 'Please type any repo name to deploy', name: 'repo')
       choice(
         name: 'Branch',
         choices: ['main','develop','feature'],
-        description:'Please select any branch name to built')
-    }
+        description: 'Please select any branch name to built')
+        }
+
     stages{
         stage('gitclone'){
             steps{
                 git branch:'${branch}',
-                url:'https://github.com/jhansi509/helloworld-project-1.git'
+                url:'https://github.com/jhansi509/${repo}'
         }
         }
         stage('maven build'){
