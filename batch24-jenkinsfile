@@ -1,0 +1,33 @@
+pipeline {
+    agent { label 'master' }
+    tools{
+        jdk 'Java'
+        maven 'Maven'
+    }
+     options {
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '2', numToKeepStr: '5'))
+    ansiColor('xterm')
+    disableConcurrentBuilds()
+    }
+   parameters {
+      choice(
+        name: 'Branch',
+        choices: ['main','develop','feature'],
+        description:'Please select any branch name to built')
+    }
+    stages{
+        stage('gitclone'){
+            steps{
+                git branch:'${branch}',
+                url:'https://github.com/jhansi509/helloworld-project-1.git'
+        }
+        }
+        stage('maven build'){
+            steps{
+                sh 'mvn clean package'
+            }
+        }
+
+    }
+    
+}
